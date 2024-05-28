@@ -45,8 +45,40 @@ for (i in 1:nrow(listfile)) {
   
 }
 
-write.csv(df, "Output/est_constant_reflectance.csv", row.names = F)
+write.csv(df, "Output/test_constant_reflectance.csv", row.names = F)
 
 
 ```
+
+```{r data processing}
+
+
+a <- df %>% 
+  group_by(Spectra) %>% 
+  reframe(Wavelength = Wavelength,
+          Value = c(zoo::rollmean(Value, k=5, fill = NA)),
+          Date = Date,
+          Time = Time,
+          IntegrationTime = IntegrationTime) %>% 
+  ungroup() %>% 
+  filter(!is.na(Value)) %>% 
+  mutate(ID = floor(as.numeric(Spectra)/10)) %>% 
+  group_by(Wavelength,ID) %>% 
+  reframe(Value = mean(Value),
+          Date = unique(Date)[1],
+          Time = unique(Time)[1],
+          IntegrationTime = mean(IntegrationTime))
+
+```
+
+```{r plot}
+
+a %>% 
+  filter(Wavelength == 650 | Wavelength == 900 | Wavelength == 450,
+         ID > 12) %>% 
+  ggplot()+
+  geom_line(aes(ID, Value, color = as.factor(Wavelength)))
+
+```
+
 
