@@ -1,0 +1,52 @@
+---
+title: "TXT_processing"
+author: "Simon Oiry"
+format: html
+editor: source
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r packages}
+library(tidyverse)
+```
+
+```{r data opening}
+
+
+listfile <- list.files("DATA/TXT/Spectra", recursive = T , full.names = T) %>% 
+  as.data.frame() %>% 
+  rename(path = ".") %>% 
+  mutate(Spectra = gsub(".*/","",path) %>% gsub(".asd.txt","",.))
+
+for (i in 1:nrow(listfile)) {
+  
+  
+  a <- read_table(listfile$path[i], 
+    col_names = FALSE, skip = 4)
+  
+  b <- read_table(listfile$path[i], skip = 35) %>% 
+    set_names(c("Wavelength", "Value")) %>% 
+    mutate(Spectra = listfile$Spectra[i],
+           Date = as.character(a[3,3]),
+           Time = as.character(a[3,5]),
+           IntegrationTime = as.numeric(a[4,4]))
+  
+  if (i == 1) {
+    
+    df <- b
+    
+  }else{
+    
+    df <- rbind(df,b)
+    
+  }
+  
+}
+
+write.csv(df, "Output/est_constant_reflectance.csv", row.names = F)
+
+
+```
+

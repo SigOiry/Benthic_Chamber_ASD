@@ -1,0 +1,8 @@
+[1,"==> quarto preview TXT_processing.qmd --to html --no-watch-inputs --no-browse\n\n"]
+[1,"\r\n\r\nprocessing file: TXT_processing.qmd\r\n\r  |                                                             \r  |                                                       |   0%\r  |                                                             \r  |...........                                            |  20%               \r  |                                                             \r  |......................                                 |  40% [packages]    "]
+[1,"\r  |                                                             \r  |.................................                      |  60%               \r  |                                                             \r  |............................................           |  80% [data opening]"]
+[1,"\r  |                                                             \r  |.......................................................| 100%               \r                                                                                                         \r\n"]
+[1,"output file: TXT_processing.knit.md\r\n\r\n"]
+[1,"pandoc \n  to: html\n  output-file: TXT_processing.html\n  standalone: true\n  section-divs: true\n  html-math-method: mathjax\n  wrap: none\n  default-image-extension: png\n  \nmetadata\n  document-css: false\n  link-citations: true\n  date-format: long\n  lang: en\n  title: TXT_processing\n  author: Simon Oiry\n  editor: source\n  \n"]
+[1,"Output created: TXT_processing.html\n\nWatching files for changes\n"]
+[1,"Browse at http://localhost:3123/\n"]

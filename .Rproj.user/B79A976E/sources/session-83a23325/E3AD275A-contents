@@ -1,0 +1,63 @@
+########### Initialisation   
+rm(list = ls())
+
+library("raster")
+library("rgdal")
+library("sf")
+library("sp")
+library("rstudioapi")
+library(httr)
+library(rvest)
+library(signal)
+library(ggplot2)
+library(stringr)
+library(readr)
+library("ggridges")
+library(dbplyr)
+library("gridExtra")
+library("cowplot")
+library("ggridges")
+library("readxl")
+library(forcats)
+library(dplyr)
+library(reshape2)
+
+
+
+
+Database<-selectDirectory(caption="Select Spectrum Directory")
+
+filenames<-list.files(Database,pattern=".txt",full.names = T)
+
+for (i in 1:length(filenames)) {
+
+  a<- read_delim(filenames[i], 
+                 delim = "\t", escape_double = FALSE, 
+                 trim_ws = TRUE)
+  names(a)<-c("Wavelength","Values")
+  a$Values<-gsub(",",".",a$Values)
+  a$Values<-as.numeric(a$Values)
+  
+    names<-gsub(".*/","",filenames[i])
+    names<-gsub(".asd.txt","",names)
+  
+  if(exists("spectra")==F){
+    spectra<-a
+    names(spectra)<-c("Wavelength",names)
+
+  }else{
+    spectra[,ncol(spectra)+1]<-a[,2]
+    names(spectra)<-c(names(spectra)[-length(names(spectra))],names)
+  }  
+  
+  
+}
+
+
+df <- melt(spectra ,  id.vars = 'Wavelength', variable.name = 'series')
+
+ggplot(df, aes(Wavelength, value,group=1)) +
+  geom_line(aes(color = series))
+
+ggplot(spectra,aes(x=Wavelength,y=TEST200020))+
+  geom_line(colour="gray")
